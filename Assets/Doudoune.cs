@@ -12,6 +12,7 @@ public class Doudoune : MonoBehaviour {
 
     public float runSpeed;
     public float bulletCooldown = 0.4f;
+    public Projectile projectile;
 
     SpriteRenderer _sr;
     public Sprite idle;
@@ -21,7 +22,29 @@ public class Doudoune : MonoBehaviour {
 
     AIPhase phase = AIPhase.idle;
 
-    GameObject player;
+    GameObject _player;
+    GameObject player {
+        get {
+            DoomGuyMovement dgm;
+            CamStrap cs;
+            if (_player==null)
+            {
+                dgm = FindObjectOfType<DoomGuyMovement>();
+                if (dgm!=null)
+                    _player = dgm.gameObject;
+                if (_player==null)
+                {
+                    cs = FindObjectOfType<CamStrap>();
+                    if (cs!=null)
+                        _player = cs.gameObject;
+                }
+            }
+
+            return _player;
+
+        }
+    }
+
     public int startHitPoints = 100;
     int hitPoints;
 
@@ -36,13 +59,21 @@ public class Doudoune : MonoBehaviour {
 	void Start () {
         _sr = GetComponentInChildren<SpriteRenderer>();
         _rig = GetComponent<Rigidbody2D>();
-        hitPoints = startHitPoints;
-        player = FindObjectOfType<DoomGuyMovement>().gameObject;
+        hitPoints = startHitPoints;;
         changePhase();
 	}
+
+    void Impact(ImpactData id)
+    {
+        hitPoints -= id.projectile.damage;
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (hitPoints <= 0)
+        {
+            Destroy(this.gameObject);
+        }
         if (nextPhaseIn <= 0)
         {
             changePhase();
@@ -69,6 +100,11 @@ public class Doudoune : MonoBehaviour {
                         bullets -= 1;
                         bulletCool = bulletCooldown;
                         _sr.sprite = fire;
+                        Projectile p = Instantiate<Projectile>(projectile);
+                        p.transform.position = this.transform.position;
+                        p.velocity = (player.transform.position-this.transform.position).normalized * 10;
+                        p.transform.rotation = Quaternion.LookRotation(p.velocity.normalized);
+                        p.FiredBy = gameObject.transform.root.gameObject;
                     }
                     else
                     {
@@ -121,7 +157,6 @@ public class Doudoune : MonoBehaviour {
         switch (phase)
         {
             case AIPhase.idle:
-                float angle = Random.value * Mathf.PI * 2;
                 direction = getFurthest();
                 nextPhaseIn = 2.0f + Random.value * 3.0f;
                 _sr.sprite = idle;

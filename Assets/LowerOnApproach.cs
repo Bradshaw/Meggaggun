@@ -3,22 +3,22 @@ using System.Collections;
 
 public class LowerOnApproach : MonoBehaviour {
 
-    Transform player;
     public Transform lowerThis;
     public float lowerBy = 0.5f;
-    public float distance = 5;
     public float speed = 1;
 
-    int detected = 0;
+    public float stayOpenForSeconds;
+
+    float timeToClose = 0;
 
 	// Use this for initialization
 	void Start () {
-        player = FindObjectOfType<DoomGuyMovement>().transform;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        if (detected>0)
+	void FixedUpdate () {
+        timeToClose -= Time.fixedDeltaTime;
+        if (timeToClose>0)
         {
             Vector3 lpos = lowerThis.localPosition;
             lpos.z = Mathf.Lerp(lpos.z, lowerBy, speed * Time.deltaTime);
@@ -32,12 +32,8 @@ public class LowerOnApproach : MonoBehaviour {
         }
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
-        detected++;
-    }
-    void OnTriggerExit(Collider other)
-    {
-        detected--;
+        timeToClose = stayOpenForSeconds;
     }
 }

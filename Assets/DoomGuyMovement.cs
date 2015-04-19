@@ -20,4 +20,10 @@ public class DoomGuyMovement : MonoBehaviour {
         _rig.MoveRotation(_rig.rotation + SmoothedInput.smoothedX*rotationPower);
         _rig.AddForce((new Vector2(Input.GetAxis("Vertical") * runSpeed, Input.GetAxis("Horizontal") * runSpeed)).rotate(_rig.rotation), ForceMode2D.Force);
 	}
+
+    void Impact(ImpactData id)
+    {
+        _rig.AddForce(id.projectile.velocity.xy(), ForceMode2D.Impulse);   
+    }
+
 }

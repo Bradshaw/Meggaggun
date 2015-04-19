@@ -3,13 +3,15 @@ using System.Collections;
 
 public class PointAtCam : MonoBehaviour {
 
-    public Camera cam;
-
-	// Use this for initialization
-	void Start () {
-        if (cam == null)
-            cam = Camera.main;
-	}
+    Camera _cam;
+    Camera cam
+    {   
+        get{
+            if (_cam == null)
+                _cam = Camera.main;
+            return _cam;
+        }
+    }
 	
 	// Update is called once per frame
 	void Update () {
