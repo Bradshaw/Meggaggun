@@ -9,7 +9,7 @@ public class Pistol : MonoBehaviour {
 
     Meggagun mg;
 
-    float cool = 1;
+    float cool = 0;
     bool firing = false;
 
     // Use this for initialization

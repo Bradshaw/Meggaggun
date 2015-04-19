@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Rocket : MonoBehaviour {
-    public Projectile projectile;
+public class GrenadeLauncher : MonoBehaviour {
+
+    public GameObject grenade;
     public int ammo = 20;
     public float rate;
 
+    public float forwardVel;
+    public float upwardVel;
 
     Meggagun mg;
 
@@ -26,12 +29,13 @@ public class Rocket : MonoBehaviour {
             if (cool <= 0)
             {
                 float Spread = 0.0f;
-                Projectile p = Instantiate<Projectile>(projectile);
-                p.transform.rotation = mg.gunModel.transform.rotation;
-                p.transform.Rotate(new Vector3(Random.Range(-Spread, Spread), Random.Range(-Spread, Spread), 0));
-                p.transform.position = mg.gunModel.transform.position;
-                p.velocity = p.transform.forward * 1;
-                p.FiredBy = gameObject.transform.root.gameObject;
+                GameObject go = Instantiate(grenade);
+                go.transform.rotation = Random.rotation;
+                go.transform.position = mg.gunModel.transform.position;
+                Rigidbody rig = go.GetComponent<Rigidbody>();
+                rig.velocity = mg.transform.right * forwardVel+ mg.transform.forward * upwardVel;
+                rig.angularVelocity = Random.rotation.eulerAngles * 3;
+
                 cool += 1;
                 ammo--;
             }
@@ -44,7 +48,7 @@ public class Rocket : MonoBehaviour {
 
     void Fire()
     {
-        if (ammo>0)
+        if (ammo > 0)
             firing = true;
     }
 }

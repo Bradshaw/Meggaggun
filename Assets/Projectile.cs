@@ -10,6 +10,7 @@ public struct ImpactData
 
 public class Projectile : MonoBehaviour {
 
+    public LayerMask lm;
     public GameObject FiredBy;
     public int damage = 0;
 
@@ -28,7 +29,7 @@ public class Projectile : MonoBehaviour {
 	void FixedUpdate () {
         Ray r = new Ray(transform.position, velocity*Time.fixedDeltaTime);
         RaycastHit rh;
-        if (Physics.Raycast(r, out rh))
+        if (Physics.Raycast(r, out rh, Mathf.Infinity, lm))
         {
             if (rh.collider.transform.root.gameObject!=FiredBy && rh.distance < (velocity * Time.fixedDeltaTime).magnitude)
             {
