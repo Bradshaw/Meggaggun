@@ -43,6 +43,8 @@ public class GenerateLevel : MonoBehaviour {
     public GameObject corridor;
     public GameObject door;
 
+    public GameObject player;
+
     public List<GameObject> enemies;
 
     List<Tile> layout;
@@ -146,6 +148,10 @@ public class GenerateLevel : MonoBehaviour {
                 if (en != null)
                 {
                     en.transform.position = new Vector3(i, j, 0);
+                    if (Vector3.Distance(en.transform.position, player.transform.position) < 4)
+                    {
+                        Destroy(en.gameObject);
+                    }
                 }
             }
         }

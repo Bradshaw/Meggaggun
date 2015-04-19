@@ -9,6 +9,8 @@ public class LowerOnApproach : MonoBehaviour {
     public float distance = 5;
     public float speed = 1;
 
+    int detected = 0;
+
 	// Use this for initialization
 	void Start () {
         player = FindObjectOfType<DoomGuyMovement>().transform;
@@ -16,7 +18,7 @@ public class LowerOnApproach : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Vector3.Distance(transform.position, player.position) < distance)
+        if (detected>0)
         {
             Vector3 lpos = lowerThis.localPosition;
             lpos.z = Mathf.Lerp(lpos.z, lowerBy, speed * Time.deltaTime);
@@ -29,4 +31,13 @@ public class LowerOnApproach : MonoBehaviour {
             lowerThis.localPosition = lpos;
         }
 	}
+
+    void OnTriggerEnter(Collider other)
+    {
+        detected++;
+    }
+    void OnTriggerExit(Collider other)
+    {
+        detected--;
+    }
 }
