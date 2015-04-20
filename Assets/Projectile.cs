@@ -10,6 +10,8 @@ public struct ImpactData
 
 public class Projectile : MonoBehaviour {
 
+    AudioSource src;
+
     public LayerMask lm;
     public GameObject FiredBy;
     public int damage = 0;
@@ -23,6 +25,7 @@ public class Projectile : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        src = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -40,6 +43,8 @@ public class Projectile : MonoBehaviour {
                 rh.collider.transform.root.gameObject.SendMessage("Impact", impact, SendMessageOptions.DontRequireReceiver);
                 this.gameObject.SendMessage("Impact", impact, SendMessageOptions.DontRequireReceiver);
                 StartCoroutine(DestroyNextFrame());
+                if (src!=null)
+                    AudioSource.PlayClipAtPoint(src.clip, this.transform.position);
             }
         }
         transform.position = transform.position + velocity * Time.fixedDeltaTime;

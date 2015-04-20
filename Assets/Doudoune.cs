@@ -10,6 +10,9 @@ enum AIPhase
 
 public class Doudoune : MonoBehaviour {
 
+    public AudioSource src;
+
+
     public float runSpeed;
     public float bulletCooldown = 0.4f;
     public Projectile projectile;
@@ -65,6 +68,7 @@ public class Doudoune : MonoBehaviour {
 
     void Impact(ImpactData id)
     {
+        AudioSource.PlayClipAtPoint(src.clip, this.transform.position);
         hitPoints -= id.projectile.damage;
     }
 	

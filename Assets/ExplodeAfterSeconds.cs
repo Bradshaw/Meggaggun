@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ExplodeAfterSeconds : MonoBehaviour {
 
+    public AudioSource src;
+
     public ParticleSystem particles;
     public Projectile projectile;
     public int count;
@@ -18,6 +20,7 @@ public class ExplodeAfterSeconds : MonoBehaviour {
     IEnumerator BlowUp()
     {
         yield return new WaitForSeconds(seconds);
+        AudioSource.PlayClipAtPoint(src.clip, this.transform.position);
         particles.Emit(500);
         particles.transform.parent = null;
         Destroy(particles.gameObject, particles.startLifetime); // if particles live for at most 5 secs

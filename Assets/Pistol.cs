@@ -2,6 +2,9 @@
 using System.Collections;
 
 public class Pistol : MonoBehaviour {
+
+    public AudioSource src;
+
     public Projectile projectile;
 
     public float rate;
@@ -25,6 +28,7 @@ public class Pistol : MonoBehaviour {
         {
             if (cool <= 0)
             {
+                src.Play();
                 float Spread = 3.0f;
                 Projectile p = Instantiate<Projectile>(projectile);
                 p.transform.rotation = mg.gunModel.transform.rotation;

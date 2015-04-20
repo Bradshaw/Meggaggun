@@ -44,6 +44,7 @@ public class GenerateLevel : MonoBehaviour {
     public GameObject door;
 
     public GameObject player;
+    public GameObject ammo;
 
     public List<GameObject> enemies;
 
@@ -77,7 +78,7 @@ public class GenerateLevel : MonoBehaviour {
 
     void Generate()
     {
-        PlaceRoom(3, 3, 2, 2,1);
+        PlaceRoom(1, 1, 2, 2,1);
         PlaceRooms(1000000);
 
         int m_grp = -1;
@@ -121,6 +122,7 @@ public class GenerateLevel : MonoBehaviour {
                 Tile t = getTile(i, j);
                 GameObject go = null;
                 GameObject en = null;
+                GameObject am = null;
                 switch (t.type)
                 {
                     case TileType.wall:
@@ -130,11 +132,15 @@ public class GenerateLevel : MonoBehaviour {
                         go = Instantiate<GameObject>(corridor);
                         if (Random.value < 0.1)
                             en = Instantiate<GameObject>(enemies.PickRandom());
+                        if (Random.value < 0.2)
+                            am = Instantiate<GameObject>(ammo);
                         break;
                     case TileType.room  :
                         go = Instantiate<GameObject>(floor);
                         if (Random.value < 0.1)
                             en = Instantiate<GameObject>(enemies.PickRandom());
+                        if (Random.value < 0.02)
+                            am = Instantiate<GameObject>(ammo);
                         break;
                     case TileType.door:
                         go = Instantiate<GameObject>(door);
@@ -144,6 +150,11 @@ public class GenerateLevel : MonoBehaviour {
                 {
                     go.transform.parent = this.transform;
                     go.transform.position = new Vector3(i, j, 0);
+                }
+                if (am != null)
+                {
+                    am.transform.parent = this.transform;
+                    am.transform.position = new Vector3(i, j, 0);
                 }
                 if (en != null)
                 {
@@ -402,3 +413,4 @@ public class Connector<T>
     }
 
 }
+

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ChainGun : MonoBehaviour {
 
+    public AudioSource src;
+
     public Projectile projectile;
 
     public float maxRate;
@@ -10,6 +12,7 @@ public class ChainGun : MonoBehaviour {
     public float spoolDownTime;
 
     public int ammo;
+    public int maxAmmo;
 
     Meggagun mg;
 
@@ -24,6 +27,7 @@ public class ChainGun : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
+        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
         cool -= Time.deltaTime * spool * maxRate;
         if (cool <= 0)
         {
@@ -37,6 +41,7 @@ public class ChainGun : MonoBehaviour {
                 p.velocity = p.transform.forward * 15;
                 p.FiredBy = gameObject.transform.root.gameObject;
                 ammo--;
+                src.Play();
             }
             cool += 1;
         }

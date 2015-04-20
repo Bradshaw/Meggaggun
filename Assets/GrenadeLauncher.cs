@@ -3,8 +3,11 @@ using System.Collections;
 
 public class GrenadeLauncher : MonoBehaviour {
 
+    public AudioSource src;
+
     public GameObject grenade;
     public int ammo = 20;
+    public int maxAmmo = 20;
     public float rate;
 
     public float forwardVel;
@@ -24,6 +27,7 @@ public class GrenadeLauncher : MonoBehaviour {
     // Update is called once per frame
     void LateUpdate()
     {
+        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
         if (firing)
         {
             if (cool <= 0)
@@ -35,7 +39,7 @@ public class GrenadeLauncher : MonoBehaviour {
                 Rigidbody rig = go.GetComponent<Rigidbody>();
                 rig.velocity = mg.transform.right * forwardVel+ mg.transform.forward * upwardVel;
                 rig.angularVelocity = Random.rotation.eulerAngles * 3;
-
+                src.Play();
                 cool += 1;
                 ammo--;
             }

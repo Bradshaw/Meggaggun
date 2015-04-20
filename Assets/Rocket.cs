@@ -2,8 +2,12 @@
 using System.Collections;
 
 public class Rocket : MonoBehaviour {
+
+    public AudioSource src;
+
     public Projectile projectile;
     public int ammo = 20;
+    public int maxAmmo = 20;
     public float rate;
 
 
@@ -21,6 +25,7 @@ public class Rocket : MonoBehaviour {
     // Update is called once per frame
     void LateUpdate()
     {
+        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
         if (firing)
         {
             if (cool <= 0)
@@ -34,6 +39,7 @@ public class Rocket : MonoBehaviour {
                 p.FiredBy = gameObject.transform.root.gameObject;
                 cool += 1;
                 ammo--;
+                src.Play();
             }
         }
         cool -= Time.deltaTime * rate;
